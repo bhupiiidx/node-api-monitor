@@ -43,6 +43,7 @@ const monitorSlackApi = async () => {
   previousData = getResponse.data.data;
 };
 
+console.log("Node api monitor running...");
 setInterval(async () => {
   await monitorSlackApi();
 }, refreshInterval);
