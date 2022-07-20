@@ -32,29 +32,50 @@ const alertSlack = async (item) => {
 
 const monitorSlackApi = async () => {
   const getResponse = await axios.get(slackMonitorApi);
-  if (previousData.length > 3) {
-    await getResponse.data.data.map(async (item, index) => {
+
+  var arryObj = {};
+  await getResponse.data.data.map(async (item) => {
+    var keyName = item.name.toLowerCase().replaceAll(" ", "-");
+    arryObj[keyName] = {
+      id: item.id,
+      name: item.name,
+      status_name: item.status_name,
+    };
+  });
+
+  //   await Object.keys(arryObj).map((m) =>
+  //     console.log("arryObj 1 ======>", arryObj[m].name)
+  //   );
+
+  if (previousData.length > 2) {
+    await Object.keys(arryObj).map(async (key_name) => {
       // Operational
-      if (item.status_name === "Operational") {
-        if (item.status_name !== previousData[2][index].status_name) {
-          const text = `${item.name} ${item.status_name}`;
+      if (arryObj[key_name].status_name === "Operational") {
+        if (
+          arryObj[key_name].status_name !==
+          previousData[2][key_name].status_name
+        ) {
+          const text = `${arryObj[key_name].name} ${arryObj[key_name].status_name}`;
           await alertSlack({ text });
         }
       }
       // Partial Outage && Performance Issue
       else if (
-        item.status_name === "Partial Outage" ||
-        item.status_name === "Performance Issues"
+        arryObj[key_name].status_name === "Partial Outage" ||
+        arryObj[key_name].status_name === "Performance Issues"
       ) {
         if (
-          previousData[0][index].status_name ===
-            previousData[1][index].status_name &&
-          previousData[0][index].status_name ===
-            previousData[2][index].status_name &&
-          previousData[0][index].status_name !== "Operational"
+          previousData[0][key_name].status_name ===
+            previousData[1][key_name].status_name &&
+          previousData[0][key_name].status_name ===
+            previousData[2][key_name].status_name &&
+          previousData[0][key_name].status_name !== "Operational"
         ) {
-          if (item.status_name !== previousData[0][index].status_name) {
-            const text = `${item.name} ${item.status_name}`;
+          if (
+            arryObj[key_name].status_name !==
+            previousData[0][key_name].status_name
+          ) {
+            const text = `${arryObj[key_name].name} ${arryObj[key_name].status_name}`;
             await alertSlack({ text });
           }
         }
@@ -62,13 +83,13 @@ const monitorSlackApi = async () => {
     });
   }
 
-  previousData.push(getResponse.data.data);
+  previousData.push(arryObj);
   while (previousData.length > 3) {
     previousData.shift();
   }
 };
 
-console.log("Node api monitor running...");
 setInterval(async () => {
+  console.log("______Refreshed_______");
   await monitorSlackApi();
 }, refreshInterval);
