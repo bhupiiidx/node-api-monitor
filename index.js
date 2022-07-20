@@ -1,7 +1,7 @@
 const axios = require("axios");
 require("dotenv").config();
 
-// Api's
+// Env Api's
 const slackMonitorApi = process.env.NODE_API;
 const slackSendMessageApi = process.env.NODE_WEBHOOK_API;
 
