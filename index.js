@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 // Api's
-const slackMonitorApi = "http://216.48.177.163:8088/api/v1/components";
+const slackMonitorApi = "http://216.48.177.163:8088/api/v1/components?per_page=50";
 const slackSendMessageApi =
   "https://chat.bangalore2.com/hooks/5ub7wxdz5jy1jyzzqqx443p6pc";
 
@@ -9,7 +9,7 @@ const slackSendMessageApi =
 let previousData = [];
 
 // Refresh Interval
-const refreshInterval = 1000;
+const refreshInterval = 10000;
 
 const alertSlack = async (item) => {
   console.log("item msg is =>", item.text);
