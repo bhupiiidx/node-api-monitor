@@ -1,9 +1,9 @@
 const axios = require("axios");
+require("dotenv").config();
 
 // Api's
-const slackMonitorApi = "http://216.48.177.163:8088/api/v1/components?per_page=50";
-const slackSendMessageApi =
-  "https://chat.bangalore2.com/hooks/5ub7wxdz5jy1jyzzqqx443p6pc";
+const slackMonitorApi = process.env.NODE_API;
+const slackSendMessageApi = process.env.NODE_WEBHOOK_API;
 
 // store previous api response
 let previousData = [];
@@ -12,8 +12,7 @@ let previousData = [];
 const refreshInterval = 10000;
 
 const alertSlack = async (item) => {
-  console.log("item msg is =>", item.text);
-  const rawResponse = await axios(slackSendMessageApi, {
+  await axios(slackSendMessageApi, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -22,6 +21,7 @@ const alertSlack = async (item) => {
     data: { text: item.text },
   })
     .then((data) => {
+      console.log("Message Sent for ", item.text);
       return data.data.message;
     })
     .catch((err) => {
@@ -50,8 +50,7 @@ const monitorSlackApi = async () => {
             previousData[1][index].status_name &&
           previousData[0][index].status_name ===
             previousData[2][index].status_name &&
-          previousData[0][index].status_name !==
-            'Operational'
+          previousData[0][index].status_name !== "Operational"
         ) {
           if (item.status_name !== previousData[0][index].status_name) {
             const text = `${item.name} ${item.status_name}`;
