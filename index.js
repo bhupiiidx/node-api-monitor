@@ -31,16 +31,42 @@ const alertSlack = async (item) => {
 
 const monitorSlackApi = async () => {
   const getResponse = await axios.get(slackMonitorApi);
-  if (previousData.length > 0) {
+  if (previousData.length > 3) {
     await getResponse.data.data.map(async (item, index) => {
-      if (item.status_name !== previousData[index].status_name) {
-        const text = `${item.name} ${item.status_name}`;
-        await alertSlack({ text });
+      // Operational
+      if (item.status_name === "Operational") {
+        if (item.status_name !== previousData[2][index].status_name) {
+          const text = `${item.name} ${item.status_name}`;
+          await alertSlack({ text });
+        }
+      }
+      // Partial Outage && Performance Issue
+      else if (
+        item.status_name === "Partial Outage" ||
+        item.status_name === "Performance Issues"
+      ) {
+        if (
+          previousData[0][index].status_name ===
+            previousData[1][index].status_name &&
+          previousData[0][index].status_name ===
+            previousData[2][index].status_name &&
+          previousData[0][index].status_name !==
+            'Operational' &&
+          item.status_name !== previousData[0][index].status_name
+        ) {
+          if (item.status_name !== previousData[0][index].status_name) {
+            const text = `${item.name} ${item.status_name}`;
+            await alertSlack({ text });
+          }
+        }
       }
     });
   }
 
-  previousData = getResponse.data.data;
+  previousData.push(getResponse.data.data);
+  while (previousData.length > 3) {
+    previousData.shift();
+  }
 };
 
 console.log("Node api monitor running...");
