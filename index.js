@@ -97,7 +97,7 @@ const monitorSlackApi = async () => {
 
 function myTimer(){
   console.log("______Refreshed_______");
-  await monitorSlackApi();
+  monitorSlackApi();
 }
 
 setInterval(myTimer, refreshInterval);
