@@ -11,6 +11,7 @@ let previousData = [];
 // Refresh Interval
 const refreshInterval = 10000;
 
+// Web hook Alert
 const alertSlack = async (item) => {
   await axios(slackSendMessageApi, {
     method: "POST",
