@@ -51,8 +51,7 @@ const monitorSlackApi = async () => {
           previousData[0][index].status_name ===
             previousData[2][index].status_name &&
           previousData[0][index].status_name !==
-            'Operational' &&
-          item.status_name !== previousData[0][index].status_name
+            'Operational'
         ) {
           if (item.status_name !== previousData[0][index].status_name) {
             const text = `${item.name} ${item.status_name}`;
