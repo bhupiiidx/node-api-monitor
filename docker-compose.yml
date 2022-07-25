@@ -3,6 +3,6 @@ services:
 
   app:
     container_name: node_api_monitor
-    image: asabhi6776/node-api-monitor:1.7
+    image: node_slack:1.2
     entrypoint: ["bash", "-c", "node index.js"]
     restart: always
