@@ -1,0 +1,14 @@
+sudo: required
+services:
+  - docker
+before_script:
+  - npm install
+script:
+  - npm test
+  - docker build -t back .
+after_success:
+  - docker login -u asabhi6776 -p Singh@21997
+  - docker tag back asabhi6776/back:$TRAVIS_BUILD_NUMBER
+  - docker push asabhi6776/back:$TRAVIS_BUILD_NUMBER
+  - docker tag back asabhi6776/back:latest
+  - docker push asabhi6776/back:latest
