@@ -1,0 +1,19 @@
+version: 2.1
+
+jobs:
+ build:
+   machine:
+    image: ubuntu-2204:2022.04.2
+   steps:
+     - checkout
+     # start proprietary DB using private Docker image
+     # with credentials stored in the UI
+     - run: |
+         echo "Singh@21997" | docker login --username asabhi6776 --password-stdin
+   #      docker run -d --name db company/proprietary-db:1.2.3
+
+     # build the application image
+     - run: docker build -t asabhi6776/app1:$CIRCLE_BRANCH .
+
+     # deploy the image
+     - run: docker push asabhi6776/app1:$CIRCLE_BRANCH
