@@ -11,7 +11,7 @@ COPY ./package.json /code
 
 RUN npm i
 
-COPY ./.env /code
+#COPY ./.env /code
 
 COPY ./index.js /code
 
