@@ -17,4 +17,4 @@ jobs:
     # - run: docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t asabhi6776/node_api_monitor:$CIRCLE_BRANCH --push .
 
      # deploy the image
-     - run: docker push asabhi6776/app1:$CIRCLE_BRANCH
+     - run: docker push asabhi6776/app1:$CIRCLE_BRANCH_$CIRCLE_BUILD_NUM
