@@ -9,7 +9,7 @@ jobs:
      # start proprietary DB using private Docker image
      # with credentials stored in the UI
      - run: |
-         echo "Singh@21997" | docker login --username asabhi6776 --password-stdin
+         echo $HUB_PASSWORD | docker login --username $HUB_USERNAME --password-stdin
    #      docker run -d --name db company/proprietary-db:1.2.3
 
      # build the application image
